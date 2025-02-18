@@ -71,7 +71,9 @@ func (q *Qemu) Execve(args ExecArgs, ukernel unikernels.Unikernel) error {
 		cmdString += machineType
 	}
 
-	cmdString += " -kernel " + args.UnikernelPath
+	if args.UnikernelPath != "" {
+		cmdString += " -kernel " + args.UnikernelPath
+	}
 	if args.TapDevice != "" {
 		netcli := ukernel.MonitorNetCli(qemuString)
 		if netcli == "" {
@@ -93,7 +95,9 @@ func (q *Qemu) Execve(args ExecArgs, ukernel unikernels.Unikernel) error {
 	}
 	cmdString = appendNonEmpty(cmdString, " ", ukernel.MonitorCli(qemuString))
 	exArgs := strings.Split(cmdString, " ")
-	exArgs = append(exArgs, "-append", args.Command)
+	if args.UnikernelPath != "" && args.Command != "" {
+		exArgs = append(exArgs, "-append", args.Command)
+	}
 	vmmLog.WithField("qemu command", exArgs).Info("Ready to execve qemu")
 	return syscall.Exec(q.Path(), exArgs, args.Environment) //nolint: gosec
 }

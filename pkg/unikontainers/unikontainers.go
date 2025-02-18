@@ -156,9 +156,12 @@ func (u *Unikontainer) Exec() error {
 	unikernelVersion := u.State.Annotations[annotVersion]
 
 	// TODO: Remove this when we chroot
-	unikernelPath, err := filepath.Rel("/", u.State.Annotations[annotBinary])
-	if err != nil {
-		return err
+	var unikernelPath string
+	if u.State.Annotations[annotBinary] != "" {
+		unikernelPath, err = filepath.Rel("/", u.State.Annotations[annotBinary])
+		if err != nil {
+			return err
+		}
 	}
 
 	// TODO: Remove this when we chroot
