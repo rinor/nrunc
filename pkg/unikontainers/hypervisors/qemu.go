@@ -71,9 +71,6 @@ func (q *Qemu) Execve(args ExecArgs, ukernel unikernels.Unikernel) error {
 		cmdString += machineType
 	}
 
-	if args.UnikernelPath != "" {
-		cmdString += " -kernel " + args.UnikernelPath
-	}
 	if args.TapDevice != "" {
 		netcli := ukernel.MonitorNetCli(qemuString)
 		if netcli == "" {
@@ -89,13 +86,24 @@ func (q *Qemu) Execve(args ExecArgs, ukernel unikernels.Unikernel) error {
 			blockCli += " -drive format=raw,if=none,id=hd0,file=" + args.BlockDevice
 		}
 		cmdString += blockCli
+
+		kernel, err := ukernel.KernelFromBlock(args.BlockDevice, args.UnikernelPath)
+		if err != nil {
+			return err
+		}
+		if kernel != "" && kernel != args.UnikernelPath {
+			args.UnikernelPath = kernel
+		}
+	}
+	if args.UnikernelPath != "" {
+		cmdString += " -kernel " + args.UnikernelPath
 	}
 	if args.InitrdPath != "" {
 		cmdString += " -initrd " + args.InitrdPath
 	}
 	cmdString = appendNonEmpty(cmdString, " ", ukernel.MonitorCli(qemuString))
 	exArgs := strings.Split(cmdString, " ")
-	if args.UnikernelPath != "" && args.Command != "" {
+	if args.Command != "" {
 		exArgs = append(exArgs, "-append", args.Command)
 	}
 	vmmLog.WithField("qemu command", exArgs).Info("Ready to execve qemu")

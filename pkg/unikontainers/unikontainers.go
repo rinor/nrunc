@@ -194,7 +194,7 @@ func (u *Unikontainer) Exec() error {
 	// Check if memory limit was not set
 	if u.Spec.Linux.Resources.Memory != nil {
 		if u.Spec.Linux.Resources.Memory.Limit != nil {
-			vmmArgs.MemSizeB = uint64(*u.Spec.Linux.Resources.Memory.Limit)
+			vmmArgs.MemSizeB = uint64(*u.Spec.Linux.Resources.Memory.Limit) //nolint:gosec
 		}
 	}
 

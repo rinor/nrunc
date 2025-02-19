@@ -89,7 +89,12 @@ func (n *Nanos) KernelFromBlock(imagePath string, kernelDst string) (string, err
 	}
 	defer bootfs.Close()
 
-	return kernelDst, bootfs.CopyFile(NanosKernel, kernelDst, false)
+	err = bootfs.CopyFile(NanosKernel, kernelDst, false)
+	if err != nil {
+		return "", err
+	}
+
+	return kernelDst, nil
 }
 
 func newNanos() *Nanos {
