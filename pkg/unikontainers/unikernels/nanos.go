@@ -17,9 +17,12 @@ package unikernels
 import (
 	"errors"
 	"fmt"
+
+	"github.com/nanovms/ops/fs"
 )
 
 const NanosUnikernel string = "nanos"
+const NanosKernel string = "kernel"
 
 var ErrUndefinedVersion = errors.New("version is undefined, using default version")
 var ErrVersionParsing = errors.New("failed to parse provided version, using default version")
@@ -73,6 +76,20 @@ func (n *Nanos) MonitorBlockCli(_ string) string {
 
 func (n *Nanos) MonitorCli(_ string) string {
 	return ""
+}
+
+func (n *Nanos) KernelFromBlock(imagePath string, kernelDst string) (string, error) {
+	if kernelDst == "" {
+		kernelDst = NanosUnikernel + "/" + NanosKernel
+	}
+
+	bootfs, err := fs.NewReaderBootFS(imagePath)
+	if err != nil {
+		return "", err
+	}
+	defer bootfs.Close()
+
+	return kernelDst, bootfs.CopyFile(NanosKernel, kernelDst, false)
 }
 
 func newNanos() *Nanos {

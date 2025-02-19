@@ -80,7 +80,7 @@ func (fc *Firecracker) Path() string {
 	return fc.binaryPath
 }
 
-func (fc *Firecracker) Execve(args ExecArgs, _ unikernels.Unikernel) error {
+func (fc *Firecracker) Execve(args ExecArgs, ukernel unikernels.Unikernel) error {
 	// FIXME: Note for getting unikernel specific options.
 	// Due to the way FC operates, we have not encountered any guest specific
 	// options yet. However, we need to revisit how we can use guest specific
@@ -136,6 +136,16 @@ func (fc *Firecracker) Execve(args ExecArgs, _ unikernels.Unikernel) error {
 	if runtime.GOARCH == "arm64" {
 		consoleStr := " console=ttyS0"
 		args.Command += consoleStr
+	}
+
+	if args.BlockDevice != "" {
+		kernel, err := ukernel.KernelFromBlock(args.BlockDevice, args.UnikernelPath)
+		if err != nil {
+			return err
+		}
+		if kernel != "" && kernel != args.UnikernelPath {
+			args.UnikernelPath = kernel
+		}
 	}
 
 	FCSource := FirecrackerBootSource{

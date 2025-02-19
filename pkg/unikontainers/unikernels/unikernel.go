@@ -26,6 +26,7 @@ type Unikernel interface {
 	MonitorNetCli(string) string
 	MonitorBlockCli(string) string
 	MonitorCli(string) string
+	KernelFromBlock(string, string) (string, error)
 }
 
 // UnikernelParams holds the data required to build the unikernels commandline
