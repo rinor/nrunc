@@ -7,7 +7,7 @@ require (
 	github.com/creack/pty v1.1.24
 	github.com/jackpal/gateway v1.0.16
 	github.com/moby/sys/mount v0.3.4
-	github.com/nanovms/ops v0.0.0-20250219014528-885b8eb2c446
+	github.com/nanovms/ops v0.0.0-20250219143043-7ba960ced7f2
 	github.com/opencontainers/runtime-spec v1.2.0
 	github.com/rs/zerolog v1.33.0
 	github.com/sirupsen/logrus v1.9.3
@@ -38,7 +38,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/docker/go-events v0.0.0-20190806004212-e31b211e4f1c // indirect
 	github.com/docker/go-units v0.5.0 // indirect
-	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
