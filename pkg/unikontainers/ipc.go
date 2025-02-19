@@ -30,7 +30,7 @@ type IPCMessage string
 
 const (
 	initSock                 = "init.sock"
-	uruncSock                = "urunc.sock"
+	uruncSock                = "nrunc.sock"
 	ReexecStarted IPCMessage = "BOOTED"
 	AckReexec     IPCMessage = "ACK"
 	StartExecve   IPCMessage = "START"

@@ -75,6 +75,6 @@ var runCommand = cli.Command{
 		if err := startUnikontainer(context); err != nil {
 			return err
 		}
-		return fmt.Errorf("urunc run failed: %w", nil)
+		return fmt.Errorf("nrunc run failed: %w", nil)
 	},
 }

@@ -36,7 +36,7 @@ const (
 	specConfig = "config.json"
 	usage      = `Open Container Initiative runtime
 
-urunc is a command line client for running unikernel applications packaged according to
+nrunc is a command line client for running unikernel applications packaged according to
 the Open Container Initiative (OCI) format and is a compliant implementation of the
 Open Container Initiative specification.
 
@@ -46,7 +46,7 @@ The root filesystem contains the unikernel and any additional files required to 
 
 To start a new instance of a unikernel:
 
-    # urunc run [ -b bundle ] <unikernel-id>
+    # nrunc run [ -b bundle ] <unikernel-id>
 
 Where "<unikernel-id>" is your name for the instance of the unikernel that you
 are starting. The name you provide for the unikernel instance must be unique on

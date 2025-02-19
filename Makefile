@@ -44,7 +44,6 @@ endif
 URUNC_BIN_NAME := nrunc
 URUNC_BIN      := $(BUILD_DIR)/$(URUNC_BIN_NAME)
 SHIM_BIN       := $(BUILD_DIR)/containerd-shim-$(URUNC_BIN_NAME)-v2
-# PUN_BIN        := $(BUILD_DIR)/pun
 
 # Golang variables
 #? GO go binary to use (default: go)
@@ -67,7 +66,6 @@ URUNC_SRC      += $(wildcard $(CURDIR)/pkg/unikontainers/hypervisors/*.go)
 URUNC_SRC      += $(wildcard $(CURDIR)/pkg/unikontainers/unikernels/*.go)
 URUNC_SRC      += $(wildcard $(CURDIR)/pkg/network/*.go)
 SHIM_SRC       := $(wildcard $(CURDIR)/cmd/containerd-shim-$(URUNC_BIN_NAME)-v2/*.go)
-# PUN_SRC         := $(wildcard $(CURDIR)/cmd/pun/*.go)
 
 #? CNTR_TOOL Tool to run the linter container (default: docker)
 CNTR_TOOL ?= docker
@@ -78,9 +76,6 @@ LINT_CNTR_OPTS ?= $(CNTR_OPTS) -v $(CURDIR):/app -w /app
 #? LINT_CNTR_IMG The linter image to use (default: golangci/golangci-lint:v1.64.5)
 LINT_CNTR_IMG  ?= golangci/golangci-lint:v1.64.5
 LINT_CNTR_CMD  ?= golangci-lint run -v --timeout=5m
-
-#? DOCS_CNTR_IMG The mkdocs image to use (default: harbor.nbfc.io/nubificus/urunc/mkdocs:test)
-DOCS_CNTR_IMG  ?= harbor.nbfc.io/nubificus/urunc/mkdocs:latest
 
 # Install dependencies variables
 #
@@ -106,10 +101,6 @@ default: static shim
 ## shim Build only the shim for host arch..
 .PHONY: shim
 shim:  $(SHIM_BIN)_$(ARCH)
-
-# ## pun Build only pun for host arch..
-# .PHONY: pun
-# pun: $(PUN_BIN)
 
 ## static Build urunc statically for host arch.
 .PHONY: static
@@ -154,11 +145,6 @@ $(SHIM_BIN)_%: $(SHIM_SRC) | prepare
 		$(VENDOR_DIR)/github.com/containerd/go-runc/runc.go
 	$(GO_FLAGS) GOARCH=$* $(GO) build --trimpath \
 		-o $(SHIM_BIN)_$* $(CURDIR)/cmd/containerd-shim-$(URUNC_BIN_NAME)-v2
-
-# $(PUN_BIN): $(PUN_SRC) | prepare
-# 	$(GO_FLAGS) $(GO) build --trimpath \
-# 		-ldflags "$(LDFLAGS_COMMON) $(LDFLAGS_STATIC) $(LDFLAGS_OPT)" \
-# 		-o $(PUN_BIN) $(CURDIR)/cmd/pun
 
 ## install Install urunc and shim in PREFIX
 .PHONY: install

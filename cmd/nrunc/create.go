@@ -144,7 +144,7 @@ func createUnikontainer(context *cli.Context) error {
 	// create reexec process
 	selfBinary, err := os.Executable()
 	if err != nil {
-		return fmt.Errorf("failed to retrieve urunc executable: %w", err)
+		return fmt.Errorf("failed to retrieve nrunc executable: %w", err)
 	}
 	myArgs := os.Args[1:]
 	myArgs = append(myArgs, "--reexec")

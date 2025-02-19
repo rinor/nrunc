@@ -263,7 +263,7 @@ func (u *Unikontainer) Exec() error {
 	useDevmapper := false
 	useDevmapper, err = strconv.ParseBool(u.State.Annotations[annotUseDMBlock])
 	if err != nil {
-		Log.Errorf("Invalid value in useDMBlock: %s. Urunc will try to use it",
+		Log.Errorf("Invalid value in useDMBlock: %s. nrunc will try to use it",
 			u.State.Annotations[annotUseDMBlock])
 		useDevmapper = true
 	}

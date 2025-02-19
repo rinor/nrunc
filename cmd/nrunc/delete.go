@@ -41,7 +41,7 @@ status of "ubuntu01" as "stopped" the following will delete resources held for
 		},
 	},
 	Action: func(context *cli.Context) error {
-		logrus.WithField("args", os.Args).Info("urunc INVOKED")
+		logrus.WithField("args", os.Args).Info("nrunc INVOKED")
 		if err := checkArgs(context, 1, exactArgs); err != nil {
 			return err
 		}

@@ -42,7 +42,7 @@ signal to the init process of the "ubuntu01" container:
 	},
 	Action: func(context *cli.Context) error {
 		// FIXME: Remove or change level of log
-		logrus.WithField("args", os.Args).Info("urunc INVOKED")
+		logrus.WithField("args", os.Args).Info("nrunc INVOKED")
 		if err := checkArgs(context, 1, minArgs); err != nil {
 			return err
 		}
