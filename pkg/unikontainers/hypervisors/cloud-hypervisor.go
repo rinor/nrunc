@@ -24,7 +24,7 @@ import (
 const (
 	CloudHypervisorVmm    VmmType = "cloud-hypervisor"
 	CloudHypervisorBinary string  = "cloud-hypervisor"
-	CHJsonFilename        string  = "ch.json"
+	// CHJsonFilename        string  = "ch.json"
 )
 
 type CloudHypervisor struct {
@@ -53,6 +53,9 @@ func (vmm *CloudHypervisor) Execve(args ExecArgs, ukernel unikernels.Unikernel) 
 	cmdString += " --console off"
 	cmdString += " --serial tty"
 
+	if !args.Seccomp {
+		cmdString += " --seccomp false"
+	}
 	if args.TapDevice != "" {
 		netcli := ukernel.MonitorNetCli(vmmString)
 		if netcli == "" {
