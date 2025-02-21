@@ -40,7 +40,11 @@ type UnikernelParams struct {
 	Version          string // The version of the unikernel
 }
 
-var ErrNotSupportedUnikernel = errors.New("unikernel is not supported")
+var (
+	ErrNotSupportedUnikernel = errors.New("unikernel is not supported")
+	ErrUndefinedVersion      = errors.New("version is undefined, using default version")
+	ErrVersionParsing        = errors.New("failed to parse provided version, using default version")
+)
 
 func New(unikernelType string) (Unikernel, error) {
 	switch unikernelType {

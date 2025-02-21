@@ -15,70 +15,79 @@
 package unikernels
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/nanovms/ops/fs"
 )
 
-const NanosUnikernel string = "nanos"
-const NanosKernel string = "kernel"
+const (
+	NanosUnikernel string = "nanos"
+	NanosKernel    string = "kernel"
+)
 
-var ErrUndefinedVersion = errors.New("version is undefined, using default version")
-var ErrVersionParsing = errors.New("failed to parse provided version, using default version")
-
-type NanosNet struct {
-	Address string
-	Mask    string
-	Gateway string
+type nanos struct {
+	cmdline string
+	net     struct {
+		address string
+		gateway string
+		mask    string
+	}
 }
 
-type NanosBlock struct {
-	RootFS string
-}
+func (n *nanos) Init(data UnikernelParams) error {
+	if data.EthDeviceIP != "" {
+		n.net.address = "en1.ipaddr=" + data.EthDeviceIP
+	}
+	if data.EthDeviceGateway != "" {
+		n.net.gateway = "en1.gateway=" + data.EthDeviceGateway
+	}
+	if data.EthDeviceMask != "" {
+		n.net.mask = "en1.netmask=" + data.EthDeviceMask
+	}
+	if data.CmdLine != "" {
+		n.cmdline = data.CmdLine
+	}
 
-type Nanos struct {
-	Command string
-	Net     NanosNet
-	Block   NanosBlock
-}
-
-func (n *Nanos) Init(data UnikernelParams) error {
-	n.Net.Address = "en1.ipaddr=" + data.EthDeviceIP
-	n.Net.Gateway = "en1.gateway=" + data.EthDeviceGateway
-	n.Net.Mask = "en1.netmask=" + data.EthDeviceMask
 	return nil
 }
 
-func (n *Nanos) CommandString() (string, error) {
-	return fmt.Sprintf("%s %s %s %s",
-		n.Net.Address,
-		n.Net.Gateway,
-		n.Net.Mask,
-		n.Command), nil
+func (n *nanos) CommandString() (string, error) {
+	var command string
+	if n.net.address != "" {
+		command += n.net.address
+	}
+	if n.net.gateway != "" {
+		command += " " + n.net.gateway
+	}
+	if n.net.mask != "" {
+		command += " " + n.net.mask
+	}
+	if n.cmdline != "" {
+		command += " " + n.cmdline
+	}
+
+	return command, nil
 }
 
-func (n *Nanos) SupportsBlock() bool {
+func (n *nanos) SupportsBlock() bool {
 	return true
 }
 
-func (n *Nanos) SupportsFS(_ string) bool {
+func (n *nanos) SupportsFS(_ string) bool {
 	return false
 }
 
-func (n *Nanos) MonitorNetCli(_ string) string {
+func (n *nanos) MonitorNetCli(_ string) string {
 	return ""
 }
 
-func (n *Nanos) MonitorBlockCli(_ string) string {
+func (n *nanos) MonitorBlockCli(_ string) string {
 	return ""
 }
 
-func (n *Nanos) MonitorCli(_ string) string {
+func (n *nanos) MonitorCli(_ string) string {
 	return ""
 }
 
-func (n *Nanos) KernelFromBlock(imagePath string, kernelDst string) (string, error) {
+func (n *nanos) KernelFromBlock(imagePath string, kernelDst string) (string, error) {
 	if kernelDst == "" {
 		kernelDst = NanosUnikernel + "/" + NanosKernel
 	}
@@ -97,6 +106,6 @@ func (n *Nanos) KernelFromBlock(imagePath string, kernelDst string) (string, err
 	return kernelDst, nil
 }
 
-func newNanos() *Nanos {
-	return &Nanos{}
+func newNanos() *nanos {
+	return &nanos{}
 }
