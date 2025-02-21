@@ -55,7 +55,7 @@ To use the **nrunc** project, follow these steps:
    cp /home/user/.ops/images/app app
    ```
 
-   to build a "container" for `firecracker` from [Containerfile.firecracker](examples/Containerfile.firecracker)
+   build a "container" image for `firecracker` from [Containerfile.firecracker](examples/Containerfile.firecracker)
 
    ```dockerfile
    #syntax=harbor.nbfc.io/nubificus/pun:latest
@@ -83,9 +83,23 @@ To use the **nrunc** project, follow these steps:
    docker run --rm --name app_firecracker --runtime io.containerd.nrunc.v2 nanos/app:firecracker
    ```
 
+   You can do the same for:
+   - **cloud-hypervisor** - [Containerfile.cloud-hypervisor](examples/Containerfile.cloud-hypervisor)
+
+     ```sh
+     docker buildx build --builder=default --output "type=image,oci-mediatypes=true" -f Containerfile.cloud-hypervisor  -t "nanos/app:cloud-hypervisor" .
+     docker run --rm --name app_cloud-hypervisor --runtime io.containerd.nrunc.v2 nanos/app:cloud-hypervisor
+     ```
+
+   - **qemu** - [Containerfile.qemu](examples/Containerfile.qemu)
+
+     ```sh
+     docker buildx build --builder=default --output "type=image,oci-mediatypes=true" -f Containerfile.cloud-hypervisor  -t "nanos/app:qemu" .
+     docker run --rm --name app_qemu --runtime io.containerd.nrunc.v2 nanos/app:qemu
+     ```
+
 4. **Known issues**:
-   - `qemu` and `cloud-hypervisor` **do not** support **networking**
-   - `firecracker` **does** support **networking**
+   - `firecracker` **does** support **networking**, but `qemu` and `cloud-hypervisor` **do not** - https://github.com/nanovms/nanos/discussions/2090
 
 5. **Contribute**:
    If you have insights or improvements, feel free to contribute by creating a pull request or an issue.
