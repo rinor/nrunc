@@ -26,3 +26,9 @@ go.work.sum
 
 # dist folder
 dist/
+
+# examples
+examples/*
+!examples/*.firecracker
+!examples/*.cloud-hypervisor
+!examples/*.qemu

@@ -1,0 +1,14 @@
+#syntax=harbor.nbfc.io/nubificus/pun:latest
+FROM scratch
+
+COPY app /nanos/image
+
+LABEL "com.urunc.unikernel.binary"="/nanos/kernel"
+LABEL "com.urunc.unikernel.cmdline"=""
+LABEL "com.urunc.unikernel.block"="/nanos/image"
+LABEL "com.urunc.unikernel.useDMBlock"="false"
+LABEL "com.urunc.unikernel.unikernelType"="nanos"
+LABEL "com.urunc.unikernel.hypervisor"="firecracker"
+
+# docker buildx build --builder=default --output "type=image,oci-mediatypes=true" -f Containerfile.firecracker  -t "nanos/app:firecracker" .
+# docker run --rm --name app_firecracker --runtime io.containerd.nrunc.v2 nanos/app:firecracker
